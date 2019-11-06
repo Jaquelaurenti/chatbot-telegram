@@ -9,14 +9,16 @@ public class MessagesChatbot {
         if(update.message().toString().contains("burro")){
             responseMessage ="Burro é vc seu troxa";
         }
-        else if(update.message().toString().contains("gorda")){
-            responseMessage = "Gorda é sua mae";
+        else if(update.message().toString().toLowerCase().contains("apostila")){
+            responseMessage = "Informe a matéria que deseja consultar Apostilas";
 
         }
         else{
-            responseMessage = "Nao entendi";
+            responseMessage = "Aguardando escolha";
 
         }
         return responseMessage ;
     }
 }
+
+
