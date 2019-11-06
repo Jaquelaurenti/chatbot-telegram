@@ -6,9 +6,6 @@ import org.telegram.telegrambots.exceptions.TelegramApiException;
 public class Bot extends TelegramLongPollingBot {
 
     public void onUpdateReceived(Update update) {
-        //System.out.println(update.getMessage().getText());
-        //System.out.println(update.getMessage().getFrom().getFirstName());
-
         SendMessage mensagem = new SendMessage();
 
         String comand = update.getMessage().getText();
