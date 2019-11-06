@@ -6,12 +6,6 @@ public class MessagesChatbot {
         SendResponse sendResponse;
         String responseMessage;
 
-        if(update.message().equals(("/myname"))){
-
-            // Para testar enviar /myname no telegram e verificar o retorno no chatbot
-            System.out.println(update.message().text());
-            responseMessage =  "teste";
-        }
         if(update.message().toString().contains("burro")){
             responseMessage ="Burro é vc seu troxa";
         }
@@ -24,14 +18,5 @@ public class MessagesChatbot {
 
         }
         return responseMessage ;
-    }
-
-    public String getBotUsername() {
-
-        return "jaquelaurenti_bot";
-    }
-
-    public String getTokenId() {
-        return "812219430:AAE8Pti6Jj0MgeLKVyK6ZEivaytq1FheNUE";
     }
 }
