@@ -37,7 +37,7 @@ public class Main {
 
                 m = update.updateId()+1;
 
-                System.out.println("Mensagem recebida "+ update.message().text());
+                System.out.println("Mensagem recebida :"+ update.message().text());
 
                 if(!lcontrol){
                     sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "Bem vindo ao Chatbot " + ConfigBot.BOT_NOME));
@@ -54,7 +54,7 @@ public class Main {
                 baseResponse = bot.execute(new SendChatAction(update.message().chat().id(), ChatAction.typing.name()));
                 if(baseResponse.isOk() && lcontrol){
                     sendResponse = bot.execute(new SendMessage(update.message().chat().id(),messagesChatbot.onUpdateReceived(update)));
-                    System.out.println("Resposta enviada" + sendResponse.message().text()) ;
+                    System.out.println("Resposta enviada : " + sendResponse.message().text()) ;
                 }
             }
 
