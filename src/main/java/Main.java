@@ -41,10 +41,10 @@ public class Main {
 
                 if(!lcontrol){
                     sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "Bem vindo ao Chatbot " + ConfigBot.BOT_NOME));
-                    sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "Informe o servi√ßo que deseja consultar: "
+                    sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "Informe o serviÁo que deseja consultar: "
                             + "\n 1 - Apostilas"
                             + "\n 2 - Boletim"
-                            + "\n 3 - Calend√°rio de Aulas"
+                            + "\n 3 - Calend·rio de Aulas"
                             + "\n 4 - Entrega de Trabalhos"));
                     lcontrol = true;
                 }
@@ -54,7 +54,7 @@ public class Main {
                 baseResponse = bot.execute(new SendChatAction(update.message().chat().id(), ChatAction.typing.name()));
                 if(baseResponse.isOk() && lcontrol){
                     sendResponse = bot.execute(new SendMessage(update.message().chat().id(),messagesChatbot.onUpdateReceived(update)));
-                    System.out.println("Resposta enviada") ;
+                    System.out.println("Resposta enviada" + sendResponse.message().text()) ;
                 }
             }
 

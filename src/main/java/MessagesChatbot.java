@@ -6,15 +6,17 @@ public class MessagesChatbot {
         SendResponse sendResponse;
         String responseMessage;
 
-        if(update.message().toString().contains("burro")){
-            responseMessage ="Burro Ã© vc seu troxa";
+        String message = update.message().text().toLowerCase();
+        
+        if(message.contains("burro")){
+            responseMessage ="Burro é vc seu trouxa";
         }
-        else if(update.message().toString().toLowerCase().contains("apostila")){
-            responseMessage = "Informe a matÃ©ria que deseja consultar Apostilas";
+        else if(message.contains("apostila")){
+            responseMessage = "Informe a matéria que deseja consultar Apostilas";
 
         }
         else{
-            responseMessage = "Aguardando escolha";
+            responseMessage = "Aguardando escolha.";
 
         }
         return responseMessage ;
