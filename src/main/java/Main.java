@@ -40,6 +40,8 @@ public class Main {
                 System.out.println("Mensagem recebida :"+ update.message().text());
 
                 if(!lcontrol){
+                	com.pengrad.telegrambot.model.User from = update.message().from();
+                	sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "Olá " + from.firstName() + ' ' + from.lastName()));
                     sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "Bem vindo ao Chatbot " + ConfigBot.BOT_NOME));
                     sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "Informe o serviço que deseja consultar: "
                             + "\n 1 - Apostilas"
