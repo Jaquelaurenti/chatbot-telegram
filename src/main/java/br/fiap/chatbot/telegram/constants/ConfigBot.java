@@ -1,4 +1,4 @@
-package constants;
+package br.fiap.chatbot.telegram.constants;
 
 public class ConfigBot {
     public static final String BOT_NOME = "@jaquelaurenti_bot";

@@ -1,3 +1,5 @@
+package br.fiap.chatbot.telegram.main;
+
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.response.SendResponse;
 

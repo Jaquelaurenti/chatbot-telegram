@@ -1,4 +1,4 @@
-package errors;
+package br.fiap.chatbot.telegram.errors;
 
 @SuppressWarnings("serial")
 public class ErrorsChatbot extends Exception {
