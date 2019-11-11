@@ -7,7 +7,6 @@ import java.util.Map;
 import br.fiap.chatbot.telegram.constants.ConfigBot;
 import br.fiap.chatbot.telegram.model.Usuario;
 import com.pengrad.telegrambot.TelegramBot;
-import com.pengrad.telegrambot.TelegramBotAdapter;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.model.request.ChatAction;
@@ -22,7 +21,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        TelegramBot bot = TelegramBotAdapter.build(ConfigBot.BOT_TOKEN);
+        TelegramBot bot = new TelegramBot(ConfigBot.BOT_TOKEN);
         GetUpdatesResponse updatesResponse;
         SendResponse sendResponse;
 
@@ -56,13 +55,12 @@ public class Main {
                 	sendResponse = bot.execute(new SendMessage(chatId, "Olá " + usuario.getNomeCompleto()));
                     //sendResponse = bot.execute(new SendMessage(chatId, "Id " + usuario.getChatId()));
                     sendResponse = bot.execute(new SendMessage(chatId, "Bem vindo ao Chatbot " + ConfigBot.BOT_NOME));
-                    /*
                     sendResponse = bot.execute(new SendMessage(chatId, "Informe o serviço que deseja consultar: "
                             + "\n 1 - Apostilas"
                             + "\n 2 - Boletim"
                             + "\n 3 - Calendário de Aulas"
                             + "\n 4 - Entrega de Trabalhos"));
-                     */
+
 
                 }
                 else {
