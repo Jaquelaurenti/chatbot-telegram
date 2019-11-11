@@ -43,34 +43,31 @@ public class Main {
             for (Update update : updates) {
 
                 long chatId = update.message().chat().id();
-
                 Usuario usuario = usuarioList.get(chatId);
-                boolean lNew = usuario == null;
-
                 m = update.updateId()+1;
 
                 System.out.println("Id: " + chatId);
                 System.out.println("Mensagem recebida :"+ update.message().text());
 
-               if(lNew){
+               if(usuario == null){
                 	User from = update.message().from();
                 	usuario = new Usuario(chatId, from.firstName(), from.lastName());
                 	usuarioList.put(chatId, usuario);
                 	sendResponse = bot.execute(new SendMessage(chatId, "Olá " + usuario.getNomeCompleto()));
-                    sendResponse = bot.execute(new SendMessage(chatId, "Id " + usuario.getChatId()));
+                    //sendResponse = bot.execute(new SendMessage(chatId, "Id " + usuario.getChatId()));
                     sendResponse = bot.execute(new SendMessage(chatId, "Bem vindo ao Chatbot " + ConfigBot.BOT_NOME));
+                    /*
                     sendResponse = bot.execute(new SendMessage(chatId, "Informe o serviço que deseja consultar: "
                             + "\n 1 - Apostilas"
                             + "\n 2 - Boletim"
                             + "\n 3 - Calendário de Aulas"
                             + "\n 4 - Entrega de Trabalhos"));
+                     */
+
                 }
-
-                MessagesChatbot messagesChatbot = new MessagesChatbot();
-
-                baseResponse = bot.execute(new SendChatAction(chatId, ChatAction.typing.name()));
-
-                if(baseResponse.isOk() && !lNew){
+                else {
+                    MessagesChatbot messagesChatbot = new MessagesChatbot();
+                    baseResponse = bot.execute(new SendChatAction(chatId, ChatAction.typing.name()));
                     sendResponse = bot.execute(new SendMessage(chatId,messagesChatbot.onUpdateReceived(update)));
                     System.out.println("Resposta enviada : " + sendResponse.message().text()) ;
                 }
