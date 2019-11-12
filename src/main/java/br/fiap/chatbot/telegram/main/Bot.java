@@ -56,7 +56,6 @@ class Bot {
                     User from = update.message().from();
                     usuario = new Usuario(chatId, from.firstName(), from.lastName());
                     usuarioList.put(chatId, usuario);
-                    sendResponse = _bot.execute(new SendMessage(chatId, "áéíóú "));
                     sendResponse = _bot.execute(new SendMessage(chatId, "Olá " + usuario.getNomeCompleto()));
                     sendResponse = _bot.execute(new SendMessage(chatId, "Bem vindo ao Chatbot " + ConfigBot.BOT_NOME));
                     sendResponse = _bot.execute(new SendMessage(chatId, "Informe o serviço que deseja consultar: "
@@ -68,8 +67,9 @@ class Bot {
                 else {
                     MessagesChatbot messagesChatbot = new MessagesChatbot();
                     baseResponse = _bot.execute(new SendChatAction(chatId, ChatAction.typing.name()));
-                    sendResponse = _bot.execute(new SendMessage(chatId,messagesChatbot.onUpdateReceived(update)));
-                    System.out.println("Resposta enviada : " + sendResponse.message().text()) ;
+                    String message = messagesChatbot.onUpdateReceived(update.message().text(), usuario);
+                    sendResponse = _bot.execute(new SendMessage(chatId, message));
+                    System.out.println("Resposta enviada : " + message) ;
                 }
             }
         }

@@ -5,6 +5,7 @@ public class Usuario {
     private long chatId;
     private String Nome;
     private String Sobrenome;
+    private String UltimoComando;
 
     public Usuario (long chatId, String nome, String sobrenome){
         this.chatId = chatId;
@@ -25,8 +26,14 @@ public class Usuario {
     }
 
     public String getNomeCompleto(){
-
         return Nome + ' ' + Sobrenome;
     }
-    
+
+    public String getUltimoComando() {
+        return UltimoComando;
+    }
+
+    public void setUltimoComando(String ultimoComando) {
+        UltimoComando = ultimoComando;
+    }
 }
