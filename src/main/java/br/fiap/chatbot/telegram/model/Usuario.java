@@ -6,6 +6,7 @@ public class Usuario {
     private String Nome;
     private String Sobrenome;
     private String UltimoComando;
+    private Servico UltimoServico;
 
     public Usuario (long chatId, String nome, String sobrenome){
         this.chatId = chatId;
@@ -35,5 +36,13 @@ public class Usuario {
 
     public void setUltimoComando(String ultimoComando) {
         UltimoComando = ultimoComando;
+    }
+
+    public Servico getUltimoServico() {
+        return UltimoServico;
+    }
+
+    public void setUltimoServico(Servico ultimoServico) {
+        UltimoServico = ultimoServico;
     }
 }

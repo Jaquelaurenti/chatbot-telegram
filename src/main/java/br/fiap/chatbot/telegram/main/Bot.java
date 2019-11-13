@@ -21,25 +21,26 @@ class Bot {
     private static TelegramBot _bot;
     private static Map<Long, Usuario> usuarioList;
 
-    static void Start(){
-        if (_bot == null){
+    static void Start() {
+        if (_bot == null) {
             _bot = new TelegramBot(ConfigBot.BOT_TOKEN);
             usuarioList = new HashMap<>();
+            MessagesChatbot.load();
             GetMessages();
         }
     }
 
-    private static void GetMessages(){
+    private static void GetMessages() {
         GetUpdatesResponse updatesResponse;
         SendResponse sendResponse;
         BaseResponse baseResponse;
 
-        int m=0;
+        int m = 0;
         /* loop infinito pode ser alterado por algum timer de intervalo curto */
-        while (true){
+        while (true) {
             //executa comando no Telegram para obter as mensagens pendentes a partir de um off-set (limite inicial)
 
-            updatesResponse =  _bot.execute(new GetUpdates().limit(100).offset(m));
+            updatesResponse = _bot.execute(new GetUpdates().limit(100).offset(m));
             //lista de mensagens
             List<Update> updates = updatesResponse.updates();
 
@@ -47,29 +48,32 @@ class Bot {
 
                 long chatId = update.message().chat().id();
                 Usuario usuario = usuarioList.get(chatId);
-                m = update.updateId()+1;
+                m = update.updateId() + 1;
 
                 System.out.println("Id: " + chatId);
-                System.out.println("Mensagem recebida :"+ update.message().text());
+                System.out.println("Mensagem recebida :" + update.message().text());
 
-                if(usuario == null){
+                if (usuario == null) {
                     User from = update.message().from();
                     usuario = new Usuario(chatId, from.firstName(), from.lastName());
                     usuarioList.put(chatId, usuario);
                     sendResponse = _bot.execute(new SendMessage(chatId, "Olá " + usuario.getNomeCompleto()));
                     sendResponse = _bot.execute(new SendMessage(chatId, "Bem vindo ao Chatbot " + ConfigBot.BOT_NOME));
+                    /*
                     sendResponse = _bot.execute(new SendMessage(chatId, "Informe o serviço que deseja consultar: "
                             + "\n 1 - Apostilas"
                             + "\n 2 - Boletim"
                             + "\n 3 - Calendário de Aulas"
                             + "\n 4 - Entrega de Trabalhos"));
-                }
-                else {
+                     */
+                    sendResponse = _bot.execute(new SendMessage(chatId, "Informe o serviço que deseja consultar: " + MessagesChatbot.getOpcoes("", usuario)));
+                } else {
                     MessagesChatbot messagesChatbot = new MessagesChatbot();
                     baseResponse = _bot.execute(new SendChatAction(chatId, ChatAction.typing.name()));
-                    String message = messagesChatbot.onUpdateReceived(update.message().text(), usuario);
+                    //String message = messagesChatbot.onUpdateReceived(update.message().text(), usuario);
+                    String message = messagesChatbot.getOpcoes(update.message().text().toLowerCase(), usuario);
                     sendResponse = _bot.execute(new SendMessage(chatId, message));
-                    System.out.println("Resposta enviada : " + message) ;
+                    System.out.println("Resposta enviada : " + message);
                 }
             }
         }
