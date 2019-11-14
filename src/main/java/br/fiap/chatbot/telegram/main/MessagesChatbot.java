@@ -43,7 +43,7 @@ public class MessagesChatbot {
 
     public static void load(){
         servicoList = new HashMap<>();
-        Servico svc = new Servico("1", "Apostilas", "Informe a matéria que deseja consultar Apostilas:");
+        Servico svc = new Servico("1", "Apostilas", "Informe a matéria que deseja consultar Apostilas:\n");
         svc.addItem("1", new Servico("1", "Design Thinking","Download...."));
         svc.addItem("2", new Servico("2", "Java","Download...."));
         svc.addItem("3", new Servico("3", "Persistence","Download...."));
@@ -66,6 +66,7 @@ public class MessagesChatbot {
         opcoes.set("Aguardando escolha.");
 
         if (opcao == null || opcao == ""){
+            opcoes.set("");
             servicoList.forEach((key, value) -> {
                 opcoes.set(opcoes.get() + '\n' + value.getDescricao());
             });

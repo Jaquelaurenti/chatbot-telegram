@@ -17,11 +17,11 @@ public class Servico {
         this.DescricaoOpcoes = descricaoOpcoes;
     }
 
-    public void addItem(String Id,  Servico svc){
+    public void addItem(String id,  Servico svc){
         if( Opcoes == null){
             Opcoes = new HashMap<>();
         }
-        Opcoes.put(Id, svc);
+        Opcoes.put(id, svc);
     }
 
     public Map<String, Servico> getOpcoes(){
@@ -36,9 +36,9 @@ public class Servico {
         return DescricaoOpcoes;
     }
 
-    public Servico get(String Id){
+    public Servico get(String id){
         if (Opcoes != null) {
-            return Opcoes.get((Id));
+            return Opcoes.get((id));
         } else {
             return null;
         }

@@ -20,21 +20,29 @@ import java.util.Map;
 class Bot {
     private static TelegramBot _bot;
     private static Map<Long, Usuario> usuarioList;
+    private static MessagesChatbot messagesChatbot = new MessagesChatbot();
+    private static SendResponse sendResponse;
+    private static BaseResponse baseResponse;
 
-    static void Start() {
+    static void start() {
         if (_bot == null) {
             _bot = new TelegramBot(ConfigBot.BOT_TOKEN);
             usuarioList = new HashMap<>();
             MessagesChatbot.load();
-            GetMessages();
+            getMessages();
         }
     }
 
-    private static void GetMessages() {
-        GetUpdatesResponse updatesResponse;
-        SendResponse sendResponse;
-        BaseResponse baseResponse;
+    private static void sendMessage(Long chatId, String message){
+        sendResponse = _bot.execute(new SendMessage(chatId, message));
+    }
 
+    private static void sendBaseResponse(Long chatId, String action){
+        baseResponse = _bot.execute(new SendChatAction(chatId, action));
+    }
+
+    private static void getMessages() {
+        GetUpdatesResponse updatesResponse;
         int m = 0;
         /* loop infinito pode ser alterado por algum timer de intervalo curto */
         while (true) {
@@ -57,22 +65,14 @@ class Bot {
                     User from = update.message().from();
                     usuario = new Usuario(chatId, from.firstName(), from.lastName());
                     usuarioList.put(chatId, usuario);
-                    sendResponse = _bot.execute(new SendMessage(chatId, "Olá " + usuario.getNomeCompleto()));
-                    sendResponse = _bot.execute(new SendMessage(chatId, "Bem vindo ao Chatbot " + ConfigBot.BOT_NOME));
-                    /*
-                    sendResponse = _bot.execute(new SendMessage(chatId, "Informe o serviço que deseja consultar: "
-                            + "\n 1 - Apostilas"
-                            + "\n 2 - Boletim"
-                            + "\n 3 - Calendário de Aulas"
-                            + "\n 4 - Entrega de Trabalhos"));
-                     */
-                    sendResponse = _bot.execute(new SendMessage(chatId, "Informe o serviço que deseja consultar: " + MessagesChatbot.getOpcoes("", usuario)));
+                    sendBaseResponse(chatId, ChatAction.typing.name());
+                    sendMessage(chatId, "Olá " + usuario.getNomeCompleto());
+                    sendMessage(chatId, "Bem vindo ao Chatbot " + ConfigBot.BOT_NOME);
+                    sendMessage(chatId, "Informe o serviço que deseja consultar:\n " + MessagesChatbot.getOpcoes("", usuario));
                 } else {
-                    MessagesChatbot messagesChatbot = new MessagesChatbot();
-                    baseResponse = _bot.execute(new SendChatAction(chatId, ChatAction.typing.name()));
-                    //String message = messagesChatbot.onUpdateReceived(update.message().text(), usuario);
+                    sendBaseResponse(chatId, ChatAction.typing.name());
                     String message = messagesChatbot.getOpcoes(update.message().text().toLowerCase(), usuario);
-                    sendResponse = _bot.execute(new SendMessage(chatId, message));
+                    sendMessage(chatId, message);
                     System.out.println("Resposta enviada : " + message);
                 }
             }
