@@ -44,10 +44,10 @@ public class MessagesChatbot {
     public static void load(){
         servicoList = new HashMap<>();
         Servico svc = new Servico("1", "Apostilas", "Informe a matéria que deseja consultar Apostilas:");
-        svc.addItem(new Servico("1", "Design Thinking",""));
-        svc.addItem(new Servico("2", "Java",""));
-        svc.addItem(new Servico("3", "Persistence",""));
-        svc.addItem(new Servico("4", "UX Design",""));
+        svc.addItem("1", new Servico("1", "Design Thinking","Download...."));
+        svc.addItem("2", new Servico("2", "Java","Download...."));
+        svc.addItem("3", new Servico("3", "Persistence","Download...."));
+        svc.addItem("4", new Servico("4", "UX Design","Download...."));
         servicoList.put("1", svc);
 
         svc = new Servico("2", "Boletim","Tá preocupado com as notas né.");
@@ -63,6 +63,8 @@ public class MessagesChatbot {
     public static String getOpcoes(String opcao, Usuario usuario){
         AtomicReference<String> opcoes = new AtomicReference<>("");
 
+        opcoes.set("Aguardando escolha.");
+
         if (opcao == null || opcao == ""){
             servicoList.forEach((key, value) -> {
                 opcoes.set(opcoes.get() + '\n' + value.getDescricao());
@@ -73,21 +75,19 @@ public class MessagesChatbot {
 
             if (svc == null)
                     svc = servicoList.get(opcao);
+            else
+                    svc = svc.get(opcao);
 
             if (svc != null) {
                 usuario.setUltimoComando(opcao);
                 usuario.setUltimoServico(svc);
                 opcoes.set(svc.getDescricaoOpcoes());
-                List<Servico> opt = svc.getOpcoes();
+                Map<String, Servico> opt = svc.getOpcoes();
                 if (opt != null) {
-                    for (Servico servico : opt) {
-                        opcoes.set(opcoes.get() + '\n' + servico.getDescricao());
-                    }
+                    opt.forEach((key, value) -> {
+                        opcoes.set(opcoes.get() + '\n' + value.getDescricao());
+                    });
                 }
-            }
-            else
-            {
-                opcoes.set("Aguardando escolha.");
             }
         }
         return opcoes.get();

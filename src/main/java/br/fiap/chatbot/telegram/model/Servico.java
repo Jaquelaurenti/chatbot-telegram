@@ -1,13 +1,15 @@
 package br.fiap.chatbot.telegram.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Servico {
     private String Id;
     private String Descricao;
     private String DescricaoOpcoes;
-    private List<Servico> Opcoes;
+    private Map<String, Servico> Opcoes;
 
     public Servico(String id, String descricao, String descricaoOpcoes){
         this.Id = id;
@@ -15,14 +17,14 @@ public class Servico {
         this.DescricaoOpcoes = descricaoOpcoes;
     }
 
-    public void addItem(Servico svc){
+    public void addItem(String Id,  Servico svc){
         if( Opcoes == null){
-            Opcoes = new ArrayList<>();
+            Opcoes = new HashMap<>();
         }
-        Opcoes.add((svc));
+        Opcoes.put(Id, svc);
     }
 
-    public List<Servico> getOpcoes(){
+    public Map<String, Servico> getOpcoes(){
         return Opcoes;
     }
 
@@ -32,5 +34,13 @@ public class Servico {
 
     public String getDescricaoOpcoes(){
         return DescricaoOpcoes;
+    }
+
+    public Servico get(String Id){
+        if (Opcoes != null) {
+            return Opcoes.get((Id));
+        } else {
+            return null;
+        }
     }
 }
