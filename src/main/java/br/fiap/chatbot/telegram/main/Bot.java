@@ -71,8 +71,7 @@ class Bot {
                     usuario = new Usuario(chatId, from.firstName(), from.lastName());
                     usuarioList.put(chatId, usuario);
                     sendBaseResponse(chatId, ChatAction.typing.name());
-                    sendMessage(chatId, "Olá " + usuario.getNomeCompleto());
-                    sendMessage(chatId, "Bem vindo ao Chatbot " + ConfigBot.BOT_NOME);
+                    messagesChatbot.helloMessage(usuario);
                     messagesChatbot.getMainMenu(usuario);
                 } else {
                     sendBaseResponse(chatId, ChatAction.typing.name());
