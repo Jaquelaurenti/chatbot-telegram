@@ -10,12 +10,21 @@ public class Servico {
     private String Descricao;
     private String DescricaoOpcoes;
     private Map<String, Servico> Opcoes;
+    private String Comando;
+    private String ParametroComando;
 
     public Servico(String id, String descricao, String descricaoOpcoes){
+        this(id, descricao, descricaoOpcoes, null, null);
+    }
+
+    public Servico(String id, String descricao, String descricaoOpcoes, String comando, String parametroComando){
         this.Id = id;
         this.Descricao = descricao;
         this.DescricaoOpcoes = descricaoOpcoes;
+        this.Comando = comando;
+        this.ParametroComando = parametroComando;
     }
+
 
     public void addItem(String id,  Servico svc){
         if( Opcoes == null){
@@ -42,5 +51,21 @@ public class Servico {
         } else {
             return null;
         }
+    }
+
+    public String getComando() {
+        return Comando;
+    }
+
+    public void setComando(String comando) {
+        Comando = comando;
+    }
+
+    public String getParametroComando() {
+        return ParametroComando;
+    }
+
+    public void setParametroComando(String parametroComando) {
+        ParametroComando = parametroComando;
     }
 }

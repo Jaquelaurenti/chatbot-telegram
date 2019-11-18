@@ -5,8 +5,8 @@ public class Usuario {
     private long chatId;
     private String Nome;
     private String Sobrenome;
-    private String UltimoComando;
-    private Servico UltimoServico;
+    private String Opcao;
+    private Servico Servico;
 
     public Usuario (long chatId, String nome, String sobrenome){
         this.chatId = chatId;
@@ -30,19 +30,19 @@ public class Usuario {
         return Nome + ' ' + Sobrenome;
     }
 
-    public String getUltimoComando() {
-        return UltimoComando;
+    public String getOpcao() {
+        return Opcao;
     }
 
-    public void setUltimoComando(String ultimoComando) {
-        UltimoComando = ultimoComando;
+    public void setOpcao(String opcao) {
+        Opcao = opcao;
     }
 
-    public Servico getUltimoServico() {
-        return UltimoServico;
+    public Servico getServico() {
+        return Servico;
     }
 
-    public void setUltimoServico(Servico ultimoServico) {
-        UltimoServico = ultimoServico;
+    public void setServico(Servico servico) {
+        Servico = servico;
     }
 }

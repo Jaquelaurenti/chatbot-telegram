@@ -8,6 +8,7 @@ import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.model.request.ChatAction;
 import com.pengrad.telegrambot.request.GetUpdates;
 import com.pengrad.telegrambot.request.SendChatAction;
+import com.pengrad.telegrambot.request.SendDocument;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.response.BaseResponse;
 import com.pengrad.telegrambot.response.GetUpdatesResponse;
@@ -28,17 +29,21 @@ class Bot {
         if (_bot == null) {
             _bot = new TelegramBot(ConfigBot.BOT_TOKEN);
             usuarioList = new HashMap<>();
-            MessagesChatbot.load();
+            messagesChatbot.load();
             getMessages();
         }
     }
 
-    private static void sendMessage(Long chatId, String message){
+    public static void sendMessage(Long chatId, String message){
         sendResponse = _bot.execute(new SendMessage(chatId, message));
     }
 
-    private static void sendBaseResponse(Long chatId, String action){
+    public static void sendBaseResponse(Long chatId, String action){
         baseResponse = _bot.execute(new SendChatAction(chatId, action));
+    }
+
+    public static void sendDocument(Long chatId, String documentId){
+        baseResponse = _bot.execute((new SendDocument(chatId, documentId)));
     }
 
     private static void getMessages() {
@@ -61,14 +66,14 @@ class Bot {
                 System.out.println("Id: " + chatId);
                 System.out.println("Mensagem recebida :" + update.message().text());
 
-                if (usuario == null) {
+                if (usuario == null){
                     User from = update.message().from();
                     usuario = new Usuario(chatId, from.firstName(), from.lastName());
                     usuarioList.put(chatId, usuario);
                     sendBaseResponse(chatId, ChatAction.typing.name());
                     sendMessage(chatId, "Olá " + usuario.getNomeCompleto());
                     sendMessage(chatId, "Bem vindo ao Chatbot " + ConfigBot.BOT_NOME);
-                    sendMessage(chatId, "Informe o serviço que deseja consultar:\n " + MessagesChatbot.getOpcoes("", usuario));
+                    messagesChatbot.getMainMenu(usuario);
                 } else {
                     sendBaseResponse(chatId, ChatAction.typing.name());
                     String message = messagesChatbot.getOpcoes(update.message().text().toLowerCase(), usuario);
