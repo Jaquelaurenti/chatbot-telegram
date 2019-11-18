@@ -50,10 +50,15 @@ public class MessagesChatbot {
         svc.addItem("4", new Servico("4", "UX Design","", "Donwload", "BQADAQADtwAD88CZRgwDK_lQo-NmFgQ"));
         servicoList.put("1", svc);
 
-        svc = new Servico("2", "Boletim","Tá preocupado com as notas né.");
+        svc = new Servico("2", "Boletim","Informe a matéria que deseja consultar a nota:\n");
+        svc.addItem("1", new Servico("1","Design Thinking","","Nota","DT"));
+        svc.addItem("2", new Servico("2","Java","","Nota","JV"));
+        svc.addItem("3", new Servico("3","Persistence","","Nota","PS"));
+        svc.addItem("4", new Servico("4","UX Design","","Nota","UD"));
         servicoList.put("2", svc);
 
         svc = new Servico("3", "Calendário de Aulas", "Váaarias reposições!");
+        //svc.addItem("", new Servico("","","","",""));
         servicoList.put("3", svc);
 
         svc = new Servico("4", "Entrega de Trabalhos","Vixi tem trabalho pacas pra fazer!");
@@ -63,10 +68,16 @@ public class MessagesChatbot {
     public  String getOpcoes(String opcao, Usuario usuario){
         AtomicReference<String> opcoes = new AtomicReference<>("");
 
+        if (opcao.equals("/start")){
+            usuario.setServico(null);
+            getMainMenu(usuario);
+            return "";
+        }
+
         opcoes.set("Aguardando escolha.");
         usuario.setOpcao(opcao);
 
-        if (opcao == null || opcao == ""){
+        if (opcao == null || opcao == "" ){
             opcoes.set("");
             servicoList.forEach((key, value) -> {
                 opcoes.set(opcoes.get() + '\n' + value.getDescricao());
@@ -114,6 +125,18 @@ public class MessagesChatbot {
                 Bot.sendDocument(usuario.getChatId(), parametro);
                 break;
 
+            case "Nota":
+                Bot.sendBaseResponse(usuario.getChatId(), ChatAction.typing.name());
+                String message = "";
+                switch (parametro){
+                    case "DT":
+                        message = "7.0\n\nAprovado!";
+                        break;
+                    default:
+                        message = "Nota não divulgada.";
+                        break;
+                }
+                Bot.sendMessage(usuario.getChatId(), message);
             default:
                 break;
         }
