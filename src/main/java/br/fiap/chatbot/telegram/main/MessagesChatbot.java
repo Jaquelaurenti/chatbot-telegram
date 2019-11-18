@@ -44,10 +44,10 @@ public class MessagesChatbot {
     public  void load(){
         servicoList = new HashMap<>();
         Servico svc = new Servico("1", "Apostilas", "Informe a matéria que deseja consultar Apostilas:\n");
-        svc.addItem("1", new Servico("1", "Design Thinking","Download...."));
+        svc.addItem("1", new Servico("1", "Design Thinking","", "Donwload", "BQADAQADtQAD88CZRnOGwoZqMZa_FgQ"));
         svc.addItem("2", new Servico("2", "Java","", "Donwload", "BQADAQADiwAD332YRnxAr2rGB0SdFgQ"));
-        svc.addItem("3", new Servico("3", "Persistence","Download...."));
-        svc.addItem("4", new Servico("4", "UX Design","Download...."));
+        svc.addItem("3", new Servico("3", "Persistence","", "Donwload", "BQADAQADtgAD88CZRvNwcaOC1XSRFgQ"));
+        svc.addItem("4", new Servico("4", "UX Design","", "Donwload", "BQADAQADtwAD88CZRgwDK_lQo-NmFgQ"));
         servicoList.put("1", svc);
 
         svc = new Servico("2", "Boletim","Tá preocupado com as notas né.");
@@ -112,14 +112,14 @@ public class MessagesChatbot {
             case "Donwload":
                 Bot.sendBaseResponse(usuario.getChatId(), ChatAction.upload_document.name());
                 Bot.sendDocument(usuario.getChatId(), parametro);
-                usuario.setServico(null);
-                usuario.setOpcao("");
                 break;
 
             default:
                 break;
         }
-        //getMainMenu(usuario);
+        usuario.setServico(null);
+        usuario.setOpcao("");
+        getMainMenu(usuario);
     }}
 
 

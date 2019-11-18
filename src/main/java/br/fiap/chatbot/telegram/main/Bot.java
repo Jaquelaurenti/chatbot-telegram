@@ -76,7 +76,8 @@ class Bot {
                     messagesChatbot.getMainMenu(usuario);
                 } else {
                     sendBaseResponse(chatId, ChatAction.typing.name());
-                    String message = messagesChatbot.getOpcoes(update.message().text().toLowerCase(), usuario);
+                    String message = update.message().text() != null  ? update.message().text().toLowerCase() : "";
+                    message = messagesChatbot.getOpcoes(message, usuario);
                     sendMessage(chatId, message);
                     System.out.println("Resposta enviada : " + message);
                 }
