@@ -69,42 +69,28 @@ public class MessagesChatbot {
     }
 
     public String getOpcoes(String opcao, Usuario usuario) {
-        String opcoes = "";
+        AtomicReference<String> opcoes = new AtomicReference<>("");
 
         opcao = opcao == null ? "" : opcao;
-        opcoes = "Aguardando escolha.";
+        opcoes.set("Aguardando escolha.");
 
         switch (opcao) {
             case "/start":
                 usuario.setServico(null);
                 opcao = "";
                 getMainMenu(usuario);
-                opcoes = "";
+                opcoes.set("");
                 break;
-            case "oi":
+            case "/hello":
                 opcao = usuario.getOpcao();
-                opcoes = "";
+                opcoes.set("");
                 helloMessage(usuario);
                 break;
-            case "menu":
-                opcao = usuario.getOpcao();
-                opcoes = getOpcoes(opcao, usuario);
-                /*
-                if (usuario.getServico() == null) {
-                    opcoes = "";
-                    getMainMenu(usuario);
-                }
-                else
-                    opcoes = getCurrentMenu(usuario);
-                    */
-                break;
             case "":
-                opcoes = "";
-                AtomicReference<String> opcoesLst = new AtomicReference<>("");
+                opcoes.set("");
                 servicoList.forEach((key, value) -> {
-                    opcoesLst.set(opcoesLst.get() + '\n' + value.getDescricao());
+                    opcoes.set(opcoes.get() + '\n' + value.getDescricao());
                 });
-                opcoes = opcoesLst.get();
                 break;
             default:
                 Servico svc = usuario.getServico();
@@ -115,14 +101,12 @@ public class MessagesChatbot {
 
                 if (svc != null) {
                     usuario.setServico(svc);
-                    opcoes = svc.getDescricaoOpcoes();
+                    opcoes.set(svc.getDescricaoOpcoes());
                     String comando = svc.getComando();
 
                     if (comando != null && comando != " ") {
                         executaComando(usuario, comando, svc.getParametroComando());
                     } else {
-                        opcoes += getCurrentMenu(usuario);
-                        /*
                         Bot.sendBaseResponse(usuario.getChatId(), ChatAction.typing.name());
                         Map<String, Servico> opt = svc.getOpcoes();
                         if (opt != null) {
@@ -130,33 +114,18 @@ public class MessagesChatbot {
                                 opcoes.set(opcoes.get() + '\n' + value.getDescricao());
                             });
                         }
-
-                         */
                     }
                     break;
                 }
         }
 
         usuario.setOpcao(opcao);
-        return opcoes;
+        return opcoes.get();
     }
 
     public void getMainMenu(Usuario usuario) {
         Bot.sendBaseResponse(usuario.getChatId(), ChatAction.typing.name());
         Bot.sendMessage(usuario.getChatId(), "Informe o serviço que deseja consultar:\n " + getOpcoes("", usuario));
-    }
-
-    private String getCurrentMenu(Usuario usuario){
-        AtomicReference<String> opcoes = new AtomicReference<>("");
-        Bot.sendBaseResponse(usuario.getChatId(), ChatAction.typing.name());
-        Servico svc = usuario.getServico();
-        Map<String, Servico> opt = svc.getOpcoes();
-        if (opt != null) {
-            opt.forEach((key, value) -> {
-                opcoes.set(opcoes.get() + '\n' + value.getDescricao());
-            });
-        }
-        return opcoes.get();
     }
 
     public void helloMessage(Usuario usuario) {
