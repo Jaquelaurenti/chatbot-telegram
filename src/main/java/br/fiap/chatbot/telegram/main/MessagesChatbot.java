@@ -12,32 +12,8 @@ import java.util.concurrent.atomic.AtomicReference;
 public class MessagesChatbot {
     private Map<String, Servico> servicoList;
 
-    public String onUpdateReceived(String message, Usuario usuario) {
-        message = message.toLowerCase();
-        String responseMessage = "";
-
-        if (message.contains("burro")) {
-            responseMessage = "Burro é vc seu trouxa";
-        } else if (message.startsWith("1")) {
-            responseMessage = "Informe a matéria que deseja consultar Apostilas";
-            usuario.setOpcao("1");
-        } else if (message.startsWith("2")) {
-            responseMessage = "Tá preocupado com as notas né.";
-            usuario.setOpcao("2");
-        } else if (message.startsWith("3")) {
-            responseMessage = "Váaarias reposições!";
-            usuario.setOpcao("3");
-        } else if (message.startsWith("4")) {
-            responseMessage = "Vixi tem trabalho pacas pra fazer!";
-            usuario.setOpcao("4");
-        } else {
-            responseMessage = "Aguardando escolha.";
-            usuario.setOpcao("");
-        }
-        return responseMessage;
-    }
-
-    public void load() {
+    void load() {
+        //Cria HashMap com as opções dos menus
         servicoList = new HashMap<>();
         Servico svc = new Servico("1", "Apostilas", "Informe a matéria que deseja consultar Apostilas:\n");
         svc.addItem("1", new Servico("1", "Design Thinking", "", "Donwload", "BQADAQADtQAD88CZRnOGwoZqMZa_FgQ"));
@@ -68,7 +44,7 @@ public class MessagesChatbot {
         servicoList.put("4", svc);
     }
 
-    public String getOpcoes(String opcao, Usuario usuario) {
+    String getOpcoes(String opcao, Usuario usuario) {
         AtomicReference<String> opcoes = new AtomicReference<>("");
 
         opcao = opcao == null ? "" : opcao;
@@ -123,12 +99,12 @@ public class MessagesChatbot {
         return opcoes.get();
     }
 
-    public void getMainMenu(Usuario usuario) {
+    void getMainMenu(Usuario usuario) {
         Bot.sendBaseResponse(usuario.getChatId(), ChatAction.typing.name());
         Bot.sendMessage(usuario.getChatId(), "Informe o serviço que deseja consultar:\n " + getOpcoes("", usuario));
     }
 
-    public void helloMessage(Usuario usuario) {
+    void helloMessage(Usuario usuario) {
         Bot.sendMessage(usuario.getChatId(), "Olá " + usuario.getNomeCompleto());
         Bot.sendMessage(usuario.getChatId(), "Bem vindo ao Chatbot " + ConfigBot.BOT_NOME);
     }

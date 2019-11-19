@@ -26,6 +26,7 @@ class Bot {
     private static BaseResponse baseResponse;
 
     static void start() {
+        //se não existe cria nova instância.
         if (_bot == null) {
             _bot = new TelegramBot(ConfigBot.BOT_TOKEN);
             usuarioList = new HashMap<>();
@@ -34,27 +35,24 @@ class Bot {
         }
     }
 
-    public static void sendMessage(Long chatId, String message){
+    static void sendMessage(Long chatId, String message){
         sendResponse = _bot.execute(new SendMessage(chatId, message));
     }
 
-    public static void sendBaseResponse(Long chatId, String action){
+    static void sendBaseResponse(Long chatId, String action){
         baseResponse = _bot.execute(new SendChatAction(chatId, action));
     }
 
-    public static void sendDocument(Long chatId, String documentId){
+    static void sendDocument(Long chatId, String documentId){
         baseResponse = _bot.execute((new SendDocument(chatId, documentId)));
     }
 
     private static void getMessages() {
         GetUpdatesResponse updatesResponse;
         int m = 0;
-        /* loop infinito pode ser alterado por algum timer de intervalo curto */
+        //Loop para lista de mensagens
         while (true) {
-            //executa comando no Telegram para obter as mensagens pendentes a partir de um off-set (limite inicial)
-
             updatesResponse = _bot.execute(new GetUpdates().limit(100).offset(m));
-            //lista de mensagens
             List<Update> updates = updatesResponse.updates();
 
             for (Update update : updates) {
@@ -63,9 +61,9 @@ class Bot {
                 Usuario usuario = usuarioList.get(chatId);
                 m = update.updateId() + 1;
 
-                System.out.println("Id: " + chatId);
-                System.out.println("Mensagem recebida :" + update.message().text());
-
+                //Se ainda não encontrou o usuário na lista
+                //Adiciona e envia mensagem de Olá
+                //e depois o menu principal
                 if (usuario == null){
                     User from = update.message().from();
                     usuario = new Usuario(chatId, from.firstName(), from.lastName());
@@ -74,11 +72,11 @@ class Bot {
                     messagesChatbot.helloMessage(usuario);
                     messagesChatbot.getMainMenu(usuario);
                 } else {
+                    //se usuário já está na lista chama método para identificar opção selecionada
                     sendBaseResponse(chatId, ChatAction.typing.name());
                     String message = update.message().text() != null  ? update.message().text().toLowerCase() : "";
                     message = messagesChatbot.getOpcoes(message, usuario);
                     sendMessage(chatId, message);
-                    System.out.println("Resposta enviada : " + message);
                 }
             }
         }
