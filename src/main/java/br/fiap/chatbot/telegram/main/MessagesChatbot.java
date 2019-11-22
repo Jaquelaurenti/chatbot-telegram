@@ -35,6 +35,7 @@ public class MessagesChatbot {
         svc.addItem("1", new Servico("1", "Novembro/2019", "", "Data", "Novembro"));
         svc.addItem("2", new Servico("2", "Dezembro/2019", "", "Data", "Dezembro"));
         svc.addItem("3", new Servico("3", "Janeiro/2019", "", "Data", "Janeiro"));
+        svc.addItem("4", new Servico("4", "Fevereiro/2019", "", "Data", "Fevereiro"));
         svc.addItem("9", new Servico("9", "Sair", "", "Sair", null));
         servicoList.put("3", svc);
 
@@ -152,6 +153,16 @@ public class MessagesChatbot {
                         message += "23/01/2020 - Spring - Fabio\n";
                         message += "28/01/2020 - Modern Web - Danilo\n";
                         message += "30/01/2020 - Spring - Fabio\n";
+                        break;
+                    case "Fevereiro":
+                        message += "04/02/2020 - Modern Web - Danilo\n";
+                        message += "06/02/2020 - Spring - Fabio\n";
+                        message += "11/02/2020 - Modern Web - Danilo\n";
+                        message += "13/02/2020 - Modern Web - Danilo\n";
+                        message += "15/02/2020 - Spring (Manhã) - Fabio\n";
+                        message += "15/02/2020 - Spring (Tarde) - Fabio\n";
+                        message += "18/02/2020 - Empreendorismo - Ricardo\n";
+                        message += "20/02/2020 - Modern Web - Danilo\n";
                         break;
                 }
                 Bot.sendMessage(usuario.getChatId(), message);
