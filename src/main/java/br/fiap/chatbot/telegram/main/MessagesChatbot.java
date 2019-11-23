@@ -15,7 +15,7 @@ public class MessagesChatbot {
     void load() {
         //Cria HashMap com as opções dos menus
         servicoList = new HashMap<>();
-        Servico svc = new Servico("1", "Apostilas", "Informe a matéria que deseja consultar Apostilas:\n");
+        Servico svc = new Servico("1", "Apostilas", "Informe a matéria que deseja baixar as Apostilas:\n");
         svc.addItem("1", new Servico("1", "Design Thinking", "", "Donwload", "BQADAQADtQAD88CZRnOGwoZqMZa_FgQ"));
         svc.addItem("2", new Servico("2", "Java", "", "Donwload", "BQADAQADiwAD332YRnxAr2rGB0SdFgQ"));
         svc.addItem("3", new Servico("3", "Persistence", "", "Donwload", "BQADAQADtgAD88CZRvNwcaOC1XSRFgQ"));
@@ -49,10 +49,16 @@ public class MessagesChatbot {
         AtomicReference<String> opcoes = new AtomicReference<>("");
 
         opcao = opcao == null ? "" : opcao;
-        opcoes.set("Aguardando escolha.");
+        opcoes.set("Aguardando escolha... Ou digite /sair para retornar ao Menu Principal.");
 
         switch (opcao) {
             case "/start":
+                usuario.setServico(null);
+                opcao = "";
+                getMainMenu(usuario);
+                opcoes.set("");
+                break;
+            case "/sair":
                 usuario.setServico(null);
                 opcao = "";
                 getMainMenu(usuario);
@@ -108,6 +114,7 @@ public class MessagesChatbot {
     void helloMessage(Usuario usuario) {
         Bot.sendMessage(usuario.getChatId(), "Olá " + usuario.getNomeCompleto());
         Bot.sendMessage(usuario.getChatId(), "Bem vindo ao Chatbot " + ConfigBot.BOT_NOME);
+        Bot.sendMessage(usuario.getChatId(), "ainda sou uma versão Beta, então tenha paciência comigo :)");
     }
 
     private void executaComando(Usuario usuario, String comando, String parametro) {
