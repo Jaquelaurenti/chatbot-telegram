@@ -1,5 +1,18 @@
 package br.fiap.chatbot.telegram.main;
 
+/** Classe criada para controlar as mensagens que serao enviadas ao usuario de acordo com as opcoes escolhidas
+ * Metodo load(): realiza um HashMap com as opcoes de escolha que o usuario podera fazer
+ * Metodo getOpcoes(): executa as opcoes que o usuario podera escolher para retonar ao menu principal ou sair do bot caso deseje
+ * Metodo getmainMenu(): executa o menu de opcoes que o usuario podera escolher
+ * Metodo helloMesage(): executa a mensagem de inicio do bot para o usuario
+ * Metodo finalMesage(): executa a mensagem final do bot para o usuario
+ * Metodo executaComando(): executa o comando de acordo com a escolha informada pelo usuario
+ * @author @sergioHenriquePedrosa @jaquelineLaurenti
+ * @return nenhum
+ * @since outubro de 2019
+ * @version 1.0
+ **/
+
 import br.fiap.chatbot.telegram.constants.ConfigBot;
 import br.fiap.chatbot.telegram.model.Servico;
 import br.fiap.chatbot.telegram.model.Usuario;
@@ -13,7 +26,6 @@ public class MessagesChatbot {
     private Map<String, Servico> servicoList;
 
     void load() {
-        //Cria HashMap com as opções dos menus
         servicoList = new HashMap<>();
         Servico svc = new Servico("1", "Apostilas", "Informe a matéria que deseja baixar as Apostilas:\n");
         svc.addItem("1", new Servico("1", "Design Thinking", "", "Donwload", "BQADAQADtQAD88CZRnOGwoZqMZa_FgQ"));
@@ -59,11 +71,11 @@ public class MessagesChatbot {
                 opcoes.set("");
                 break;
             case "/sair":
-                usuario.setServico(null);
-                opcao = "";
-                getMainMenu(usuario);
+                opcao = usuario.getOpcao();
                 opcoes.set("");
+                finalMessage(usuario);
                 break;
+
             case "/hello":
                 opcao = usuario.getOpcao();
                 opcoes.set("");
@@ -117,12 +129,21 @@ public class MessagesChatbot {
         Bot.sendMessage(usuario.getChatId(), "ainda sou uma versão Beta, então tenha paciência comigo :)");
     }
 
+    void finalMessage(Usuario usuario) {
+        Bot.sendMessage(usuario.getChatId(), "Obrigada " + usuario.getNomeCompleto());
+        Bot.sendMessage(usuario.getChatId(), "Por utilizar nosso Bot, ainda estamos na versão Beta, mas vamos melhorar muito :)");
+    }
+
     private void executaComando(Usuario usuario, String comando, String parametro) {
         String message = "";
         switch (comando) {
             case "Donwload":
+                message = "Realizando o Upload da Apostila...";
+                Bot.sendMessage(usuario.getChatId(), message);
                 Bot.sendBaseResponse(usuario.getChatId(), ChatAction.upload_document.name());
+                message = "Download realizado. Escolha outra opcao ou digite /sair para finalizar.";
                 Bot.sendDocument(usuario.getChatId(), parametro);
+                Bot.sendMessage(usuario.getChatId(), message);
                 break;
 
             case "Nota":
