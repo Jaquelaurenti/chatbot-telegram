@@ -18,6 +18,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/** Classe criada para configuracao do recebimento e envio de mensagens, todos os metodos
+ * criados nessa classe, serao utilizados para controlar o recebimento e o envio das mensagens.
+ * Metodo start(): inicia o bot
+ * Metodo sendMessage(): executa o envio da mensagem do bot ao usuario
+ * Metodo sendDocumento(): executa o envio de documentos ao usuario
+ * Metodo getMessages(): busca as mensagens enviadas pelo usuario ao bot
+ *
+ * @author @sergioHenriquePedrosa @jaquelineLaurenti
+ * @return nenhum
+ * @since outubro de 2019
+ * @version 1.0
+ * */
+
+
 class Bot {
     private static TelegramBot _bot;
     private static Map<Long, Usuario> usuarioList;
