@@ -159,7 +159,7 @@ public class MessagesChatbot {
                         break;
                     default:
                         message = "Nota não divulgada.";
-                        message = "\nEscolha outra opcao ou digite /sair para finalizar.";
+                        message += "\nEscolha outra opcao ou digite /sair para finalizar.";
                         break;
                 }
                 Bot.sendMessage(usuario.getChatId(), message);
