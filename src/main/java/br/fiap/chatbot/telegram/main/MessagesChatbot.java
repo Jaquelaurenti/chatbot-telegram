@@ -14,8 +14,11 @@ package br.fiap.chatbot.telegram.main;
  **/
 
 import br.fiap.chatbot.telegram.constants.ConfigBot;
+import br.fiap.chatbot.telegram.errors.ErrorsChatbot;
 import br.fiap.chatbot.telegram.model.Servico;
 import br.fiap.chatbot.telegram.model.Usuario;
+import com.pengrad.telegrambot.model.Message;
+import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.request.ChatAction;
 
 import java.util.HashMap;
@@ -61,15 +64,17 @@ public class MessagesChatbot {
         servicoList.put("4", svc);
     }
 
-    String getOpcoes(String opcao, Usuario usuario) {
+    String getOpcoes(String opcao, Usuario usuario, Message message) throws ErrorsChatbot {
         AtomicReference<String> opcoes = new AtomicReference<>("");
 
         opcao = opcao == null ? "" : opcao;
         opcoes.set("Aguardando escolha... Ou digite /start para retornar ao Menu Principal.");
+        Servico svc = usuario.getServico();
 
         switch (opcao) {
             case "/start":
                 usuario.setServico(null);
+                usuario.setAguardandoUpload(false);
                 opcao = "";
                 getMainMenu(usuario);
                 opcoes.set("");
@@ -91,8 +96,22 @@ public class MessagesChatbot {
                     opcoes.set(opcoes.get() + '\n' + value.getDescricao());
                 });
                 break;
+            case "upload":
+                if (usuario.hasTrabalho(svc.getParametroComando())) {
+                    throw new ErrorsChatbot("Trabalho  já foi entregue!");
+                }
+                usuario.addTrabalho(svc.getParametroComando(), svc.getDescricao(), message.document().fileId());
+                Bot.sendMessage(usuario.getChatId(), "Upload efetuado com sucesso. ID:" + message.document().fileId());
+                usuario.setAguardandoUpload(false);
+                return getOpcoes("/start", usuario, null);
             default:
-                Servico svc = usuario.getServico();
+                if (usuario.isAguardandoUpload()){
+                    Bot.sendBaseResponse(usuario.getChatId(), ChatAction.typing.name());
+                    if (message.document() == null){
+                        Bot.sendMessage(usuario.getChatId(), "Faça o upload do documento ou digite /start para retornar ao Menu Principal.");
+                        return "";
+                    }
+                }
                 if (svc == null)
                     svc = servicoList.get(opcao);
                 else
@@ -124,7 +143,11 @@ public class MessagesChatbot {
 
     void getMainMenu(Usuario usuario) {
         Bot.sendBaseResponse(usuario.getChatId(), ChatAction.typing.name());
-        Bot.sendMessage(usuario.getChatId(), "Informe o serviço que deseja consultar:\n " + getOpcoes("", usuario));
+        try {
+            Bot.sendMessage(usuario.getChatId(), "Informe o serviço que deseja consultar:\n " + getOpcoes("", usuario, null));
+        } catch (ErrorsChatbot errorsChatbot) {
+            errorsChatbot.printStackTrace();
+        }
     }
 
     void helloMessage(Usuario usuario) {
@@ -205,6 +228,12 @@ public class MessagesChatbot {
                 }
                 Bot.sendMessage(usuario.getChatId(), message);
                 break;
+            case "Trabalho":
+                Bot.sendBaseResponse(usuario.getChatId(), ChatAction.typing.name());
+                Bot.sendMessage(usuario.getChatId(), "Faça o upload do documento ou digite /start para retornar ao Menu Principal.");
+                usuario.setAguardandoUpload(true);
+                return;
+                //break;
             case "Sair":
             default:
                 break;

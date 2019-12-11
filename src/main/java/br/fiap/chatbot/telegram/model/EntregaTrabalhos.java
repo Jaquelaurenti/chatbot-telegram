@@ -1,9 +1,13 @@
 package br.fiap.chatbot.telegram.model;
 
 public class EntregaTrabalhos {
-    private  int Id;
-    private String Rm;
-    private String Materia;
-    private  String Documento;
-    
+    private String IdMateria;
+    private String NomeMateria;
+    private  String FileId;
+
+    public EntregaTrabalhos(String idMateria, String nomeMateria, String fileId){
+        this.IdMateria = idMateria;
+        this.NomeMateria = nomeMateria;
+        this.FileId = fileId;
+    }
 }
