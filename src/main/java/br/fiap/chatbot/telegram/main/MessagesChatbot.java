@@ -97,9 +97,6 @@ public class MessagesChatbot {
                 });
                 break;
             case "upload":
-                if (usuario.hasTrabalho(svc.getParametroComando())) {
-                    throw new ErrorsChatbot("Trabalho  já foi entregue!");
-                }
                 usuario.addTrabalho(svc.getParametroComando(), svc.getDescricao(), message.document().fileId());
                 Bot.sendMessage(usuario.getChatId(), "Upload efetuado com sucesso. ID:" + message.document().fileId());
                 usuario.setAguardandoUpload(false);
@@ -161,7 +158,7 @@ public class MessagesChatbot {
         Bot.sendMessage(usuario.getChatId(), "Por utilizar nosso Bot, ainda estamos na versão Beta, mas vamos melhorar muito :)");
     }
 
-    private void executaComando(Usuario usuario, String comando, String parametro) {
+    private void executaComando(Usuario usuario, String comando, String parametro) throws ErrorsChatbot {
         String message = "";
         switch (comando) {
             case "Donwload":
@@ -230,10 +227,15 @@ public class MessagesChatbot {
                 break;
             case "Trabalho":
                 Bot.sendBaseResponse(usuario.getChatId(), ChatAction.typing.name());
+                if (usuario.hasTrabalho(parametro)) {
+                    usuario.setServico(null);
+                    usuario.setOpcao("");
+                    throw new ErrorsChatbot("Trabalho  já foi entregue!");
+                }
                 Bot.sendMessage(usuario.getChatId(), "Faça o upload do documento ou digite /start para retornar ao Menu Principal.");
                 usuario.setAguardandoUpload(true);
                 return;
-                //break;
+            //break;
             case "Sair":
             default:
                 break;
