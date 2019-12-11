@@ -10,4 +10,8 @@ public class EntregaTrabalhos {
         this.NomeMateria = nomeMateria;
         this.FileId = fileId;
     }
+
+    public String getNomeMateria() {
+        return NomeMateria;
+    }
 }

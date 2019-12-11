@@ -69,4 +69,8 @@ public class Usuario {
     public void addTrabalho(String idMateria, String nomeMaterial, String fileId)  {
         Trabalhos.put(idMateria, new EntregaTrabalhos(idMateria, nomeMaterial, fileId));
     }
+
+    public Map<String, EntregaTrabalhos> getTrabalhos() {
+        return Trabalhos;
+    }
 }

@@ -15,6 +15,7 @@ package br.fiap.chatbot.telegram.main;
 
 import br.fiap.chatbot.telegram.constants.ConfigBot;
 import br.fiap.chatbot.telegram.errors.ErrorsChatbot;
+import br.fiap.chatbot.telegram.model.EntregaTrabalhos;
 import br.fiap.chatbot.telegram.model.Servico;
 import br.fiap.chatbot.telegram.model.Usuario;
 import com.pengrad.telegrambot.model.Message;
@@ -62,6 +63,8 @@ public class MessagesChatbot {
         svc.addItem("9", new Servico("9", "Ou digite 9 para sair e voltar ao Menu Principal", "", "Sair", null));
         //svc.addItem("", new Servico("","","","",""));
         servicoList.put("4", svc);
+        svc = new Servico("5", "Trabalhos Entregues", "", "Lista", "");
+        servicoList.put("5", svc);
     }
 
     String getOpcoes(String opcao, Usuario usuario, Message message) throws ErrorsChatbot {
@@ -97,7 +100,7 @@ public class MessagesChatbot {
                 });
                 break;
             case "upload":
-                usuario.addTrabalho(svc.getParametroComando(), svc.getDescricao(), message.document().fileId());
+                usuario.addTrabalho(svc.getParametroComando(), svc.getDescricaoMateria(), message.document().fileId());
                 Bot.sendMessage(usuario.getChatId(), "Upload efetuado com sucesso. ID:" + message.document().fileId());
                 usuario.setAguardandoUpload(false);
                 return getOpcoes("/start", usuario, null);
@@ -235,7 +238,18 @@ public class MessagesChatbot {
                 Bot.sendMessage(usuario.getChatId(), "Faça o upload do documento ou digite /start para retornar ao Menu Principal.");
                 usuario.setAguardandoUpload(true);
                 return;
-            //break;
+            case "Lista":
+                Bot.sendBaseResponse(usuario.getChatId(), ChatAction.typing.name());
+                Map<String, EntregaTrabalhos> trabalhos = usuario.getTrabalhos();
+                if (trabalhos.isEmpty()){
+                    Bot.sendMessage(usuario.getChatId(), "Não há trabalhos entregues.");
+                }
+                else {
+                    trabalhos.forEach((key, value) -> {
+                        Bot.sendMessage(usuario.getChatId(), value.getNomeMateria() + ".");
+                    });
+                }
+                break;
             case "Sair":
             default:
                 break;
