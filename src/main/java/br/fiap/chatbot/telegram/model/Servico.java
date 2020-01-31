@@ -41,6 +41,10 @@ public class Servico {
         return Id + " - " + Descricao;
     }
 
+    public String getDescricaoMateria(){
+        return Descricao;
+    }
+
     public String getDescricaoOpcoes(){
         return DescricaoOpcoes;
     }

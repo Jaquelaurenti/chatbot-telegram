@@ -1,6 +1,7 @@
 package br.fiap.chatbot.telegram.main;
 
 import br.fiap.chatbot.telegram.constants.ConfigBot;
+import br.fiap.chatbot.telegram.errors.ErrorsChatbot;
 import br.fiap.chatbot.telegram.model.Usuario;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
@@ -86,11 +87,19 @@ class Bot {
                     messagesChatbot.helloMessage(usuario);
                     messagesChatbot.getMainMenu(usuario);
                 } else {
-                    //se usuário já está na lista chama método para identificar opção selecionada
-                    sendBaseResponse(chatId, ChatAction.typing.name());
-                    String message = update.message().text() != null  ? update.message().text().toLowerCase() : "";
-                    message = messagesChatbot.getOpcoes(message, usuario);
-                    sendMessage(chatId, message);
+                    try {
+                        //se usuário já está na lista chama método para identificar opção selecionada
+                        sendBaseResponse(chatId, ChatAction.typing.name());
+                        String message = update.message().text() != null  ? update.message().text().toLowerCase() :  ( update.message().document() != null  && usuario.isAguardandoUpload()? "upload" : "");
+                        message = messagesChatbot.getOpcoes(message, usuario, update.message());
+                        sendMessage(chatId, message);
+                    } catch (ErrorsChatbot errorsChatbot) {
+                        errorsChatbot.printStackTrace();
+                        usuario.setAguardandoUpload(false);
+                        sendBaseResponse(chatId, ChatAction.typing.name());
+                        sendMessage(chatId, errorsChatbot.getMessage());
+                        messagesChatbot.getMainMenu(usuario);
+                    }
                 }
             }
         }
